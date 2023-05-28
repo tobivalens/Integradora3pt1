@@ -1,6 +1,8 @@
 package ui;
 
 import java.util.Scanner;
+
+import javafx.scene.media.AudioTrack;
 import model.Controller;
 
 public class Executable {
@@ -36,10 +38,15 @@ public class Executable {
 			System.out.println("4. Delete bibliographic product ");
 			System.out.println("5. Buy a book or Suscribe to a Magazine ");
 			System.out.println("6. Reading simulation ");
+			System.out.println("7. Consult library ");
+			System.out.println("8. Report of total read pages of books and magazines ");
+			System.out.println("9. Most gender of books and magazines read ");
+
+			System.out.println("20. Text Cases ");
 			System.out.println("");
 
 
-			System.out.println("9. salir por ahora  ");
+			System.out.println("0. Exit ");
 			
 			
 
@@ -63,22 +70,30 @@ public class Executable {
 				break;
 
 			case 5:
-			buyBibliographicProduct();
+				buyBibliographicProduct();
 				
 				break;
 			case 6:
-			readingSimulation();
+			readingDEMO();
 				
 				break;
 			case 7:
+			consultLibrary();
 				
 			break;
-
+			
 			case 8:
+			reporNumberPagesReadByBibliographicP();
 				
 			break;
-
 			case 9:
+			soldProductsByGender();
+			break;
+			case 20:
+			rXSystem.testCases();
+			break;
+
+			case 0:
 				flag = true;
 				break;
 			default:
@@ -90,6 +105,7 @@ public class Executable {
 		}
 
 	}
+
 	/**
      * This method allows to register a user 
      
@@ -192,7 +208,7 @@ public class Executable {
 		System.out.println("Type the month of publish");
 		int month = reader.nextInt();
 
-		System.out.println("Typethe year of publish");
+		System.out.println("Type the year of publish");
 		int year = reader.nextInt();
 
 		if(typeProduct==1){
@@ -371,9 +387,7 @@ public void buyBibliographicProduct(){
 
 
 }
-
-	public void readingSimulation(){
-
+	public void readingDEMO(){
 		System.out.println("This is the list of users reggistered ");
 		System.out.println(rXSystem.getUserList());
 
@@ -381,30 +395,170 @@ public void buyBibliographicProduct(){
 		int userOP = reader.nextInt();
 
 		System.out.println("This is your library, which product would you like to read? ");
-		System.out.println(rXSystem.showUserLibrary(userOP-1));
+		if(rXSystem.getTypeUser(userOP-1)){
+			System.out.println(rXSystem.showPremiumLibrary(userOP-1));
+		}
+		else{
+			System.out.println(rXSystem.showRegularLibrary(userOP-1));
+			
+		}
+		
 		int productPosition = reader.nextInt();
 		boolean flag=true;
-
-	do{
 		
-		System.out.println("Select your option ");
-		System.out.println("Enter 1 to move next page.");
-        System.out.println("Enter 2 to go back.");    
-	 	System.out.println("Enter 3 to end up the lecture.");  
-		 int option = reader.nextInt();
 
-		System.out.println(rXSystem.simulation(productPosition, option)); 
-		if(option==3){
-			flag=false;
-			break;
+		rXSystem.createBookSim(userOP-1, productPosition-1);
+	
+
+		if(rXSystem.getTypeUser(userOP-1)){
+			while(flag){
+
+				System.out.println("- - - - - - - - - - - - - - - - - - - - ");
+				System.out.println("Select your option ");
+				System.out.println("Enter 1 to move next page.");
+				System.out.println("Enter 2 to go back.");    
+				 System.out.println("Enter 3 to end up the lecture.");  
+				 int option = reader.nextInt();
+	
+				 System.out.println(rXSystem.trySimulation(userOP-1, productPosition-1, option));
+				 System.out.println("- - - - - - - - - - - - - - - - - - - - ");
+		
+				if(option==3){
+					flag=false;
+					break;
+				}
+		
+	
+			}
+
 		}
+		else{
 
+			while(flag){
+
+				System.out.println("- - - - - - - - - - - - - - - - - - - - ");
+				System.out.println("Select your option ");
+				System.out.println("Enter 1 to move next page.");
+				System.out.println("Enter 2 to go back.");    
+				 System.out.println("Enter 3 to end up the lecture.");  
+				 int option = reader.nextInt();
+	
+				 System.out.println(rXSystem.readingSimRegular(userOP-1, productPosition-1, option));
+				 System.out.println("- - - - - - - - - - - - - - - - - - - - ");
 		
-	}while(flag);
+				if(option==3){
+					flag=false;
+					break;
+				}
+		
+	
+			}
+
+		}
 
 
 	}
 
+	
+	private void consultLibrary() {
+		
+
+		System.out.println("This is the list of users reggistered ");
+		System.out.println(rXSystem.getUserList());
+
+		System.out.println("Wich user wants to consult the library?  ");
+		int userOP = reader.nextInt();
+		boolean flag=true;
+		reader.nextLine();
+
+		if(rXSystem.getTypeUser(userOP-1)){
+			while(flag){
+				System.out.println(rXSystem.showPremiumLibrary(userOP-1));
+			System.out.println("What do you want to do?  ");
+			System.out.println("Insert the id or the coordinats x y of a product to start a reading session");
+			System.out.println("1- Go to next page ");
+			System.out.println("2- Go previous page");
+			System.out.println("3- Exit ");
+			String action = reader.nextLine();
+
+			if(rXSystem.runMatrixPremium(action, userOP-1).equals("c")){
+				boolean simulation=true;
+				while(simulation){
+					System.out.println("- - - - - - - - - - - - - - - - - - - - ");
+				System.out.println("Select your option ");
+				System.out.println("Enter 1 to move next page.");
+				System.out.println("Enter 2 to go back.");    
+				 System.out.println("Enter 3 to end up the lecture.");  
+				 int option = reader.nextInt();
+				 rXSystem.createBookSim(userOP-1, rXSystem.getProductSimulationP(action, userOP-1));
+				 if(option==3){
+					simulation=false;
+				 }
+				 else{
+				System.out.println(rXSystem.trySimulation(userOP-1, rXSystem.getProductSimulationP(action, userOP-1), option));
+				}
+				}
+				
+				
+			}
+			else{
+				System.out.println("no retorno c");
+			}
+
+			if(action.equals("3")){
+				flag=false;
+			}
+
+			}
+		}
+		else{
+			boolean flag1=true;
+
+			while(flag1){
+			System.out.println(rXSystem.showRegularLibrary(userOP-1));
+			System.out.println("What do you want to do?  ");
+			System.out.println("Insert the id or the coordinats x y of a product to start a reading session");
+			System.out.println("3- Exit ");
+			String action = reader.nextLine();
+
+			if(rXSystem.runRegularMatrix(action, userOP-1).equals("c")){
+				boolean simulation=true;
+				rXSystem.createBookSim(userOP-1, rXSystem.getProductSimulationR(action, userOP-1));
+				while(simulation){
+				 System.out.println("- - - - - - - - - - - - - - - - - - - - ");
+				 System.out.println("Select your option "); 
+				 System.out.println("Enter 1 to move next page.");
+				 System.out.println("Enter 2 to go back.");    
+				 System.out.println("Enter 3 to end up the lecture.");  
+				 int option = reader.nextInt();
+				 
+
+				 if(option==3){
+					simulation=false;
+				 }
+				 else{
+				System.out.println(rXSystem.readingSimRegular(userOP-1, rXSystem.getProductSimulationR(action, userOP-1), option));
+				}
+				}
+				
+			}
+			if(action.equals("3")){
+				flag1=false;
+			}
+			}
+		}
+
+		
+
+
+	}
+	 public void reporNumberPagesReadByBibliographicP(){
+		System.out.println(rXSystem.reporNumberPagesReadByBibliographicP());
+	 }
+
+	 public void soldProductsByGender(){
+		System.out.println((rXSystem.soldProductsByGender()));
+	 }
 		
 
 

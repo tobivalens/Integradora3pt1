@@ -7,7 +7,20 @@ public class Book extends BibliographicProduct{
     private String review;
     private double value;
     private Genre genre;
+    private int getPagesReadB;
     
+
+
+
+    public int getGetPagesReadB() {
+        return getPagesReadB;
+    }
+
+
+
+    public void setGetPagesReadB(int getPagesReadB) {
+        this.getPagesReadB = getPagesReadB;
+    }
 
 
 
@@ -29,6 +42,8 @@ public class Book extends BibliographicProduct{
         this.numberSoldBooks= numberSoldBooks;
         this.review=review;
         this.value=value;
+        this.genre=genre;
+        this.getPagesReadB= getPagesReadB;
         
     }
 

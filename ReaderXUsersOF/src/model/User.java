@@ -7,6 +7,7 @@ public abstract class User {
 	private String id;
 	private String name;
 	private Calendar signUpDate;
+	
 
 	public User(String id, String name) {
 

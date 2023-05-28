@@ -7,6 +7,15 @@ public class Magazine extends BibliographicProduct {
     private double suscriptionValue;
     private int activeSuscription;
     private GenreMagazine genreM;
+    private int pagesReadM;
+
+    public int getPagesReadM() {
+        return pagesReadM;
+    }
+
+    public void setPagesReadM(int pagesReadM) {
+        this.pagesReadM = pagesReadM;
+    }
 
     public GenreMagazine getGenreM() {
         return genreM;
@@ -18,7 +27,7 @@ public class Magazine extends BibliographicProduct {
 
     public Magazine(String id, String name, int pagesNumber, String periodicEmision, Calendar publicDate, GenreMagazine genre, String url, double suscriptionValue){
         super(id,name,pagesNumber,publicDate,url);
-
+        this.pagesReadM=pagesReadM;
         this.periodicEmision= periodicEmision;
         this.suscriptionValue=suscriptionValue;
         this.activeSuscription=activeSuscription;
